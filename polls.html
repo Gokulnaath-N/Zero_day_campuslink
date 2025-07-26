@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polls & Feedback - CampusLink</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+        }
+
+        .role-switcher {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .role-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-btn:not(.active) {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e9ecef;
+        }
+
+        .role-btn:not(.active):hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .create-poll-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .options-container {
+            margin-top: 15px;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .option-input input {
+            flex: 1;
+        }
+
+        .remove-option {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-option:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .add-option {
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-option:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .polls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .poll-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .poll-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .poll-header {
+            margin-bottom: 20px;
+        }
+
+        .poll-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .poll-meta {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .poll-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-closed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .poll-options {
+            margin-bottom: 20px;
+        }
+
+        .poll-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poll-option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .poll-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .poll-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option-text {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .option-percentage {
+            font-weight: bold;
+            color: #667eea;
+            margin-left: 10px;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.8s ease;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .vote-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .vote-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .vote-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .poll-results {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .total-votes {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .feedback-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.2);
+        }
+
+        .feedback-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .feedback-rating {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .feedback-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .feedback-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .feedback-event {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .about-content {
+            line-height: 1.8;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .role-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .polls-grid,
+            .feedback-cards,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-input {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .poll-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .floating-action {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 CampusLink - Polls & Feedback</h1>
+            <p>Engage the campus community with interactive polls and collect valuable feedback</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('polls')">🗳️ Polls & Voting</button>
+            <button class="nav-tab" onclick="switchTab('about')">ℹ️ About</button>
+        </div>
+
+        <!-- Polls Section -->
+        <div id="polls-section" class="content-section active">
+            <div class="role-switcher">
+                <div class="role-buttons">
+                    <button class="role-btn active" onclick="switchRole('student')">👨‍🎓 Student View</button>
+                    <button class="role-btn" onclick="switchRole('admin')">👨‍💼 Admin Dashboard</button>
+                </div>
+            </div>
+
+            <!-- Student View -->
+            <div id="student-view" class="content-section active">
+                <h2 class="section-title">🗳️ Active Polls</h2>
+                
+                <div class="polls-grid" id="active-polls">
+                    <!-- Active polls will be populated here -->
+                </div>
+
+                <h2 class="section-title">📝 Submit Feedback</h2>
+                <div class="feedback-form">
+                    <div class="form-group">
+                        <label for="event-select">Select Event/Topic:</label>
+                        <select id="event-select">
+                            <option value="">Choose an event...</option>
+                            <option value="annual-fest">Annual Cultural Fest</option>
+                            <option value="tech-symposium">Tech Symposium 2025</option>
+                            <option value="sports-meet">Inter-College Sports Meet</option>
+                            <option value="orientation">Orientation Program</option>
+                            <option value="library-services">Library Services</option>
+                            <option value="hostel-facilities">Hostel Facilities</option>
+                            <option value="cafeteria">Cafeteria Services</option>
+                            <option value="general">General Campus Feedback</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Overall Rating:</label>
+                        <div class="rating-container">
+                            <div class="star-rating" id="feedback-rating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <span id="rating-text">Click to rate</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedback-text">Your Feedback:</label>
+                        <textarea id="feedback-text" placeholder="Share your thoughts and suggestions..." rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="anonymous-feedback"> Submit anonymously
+                        </label>
+                    </div>
+                    
+                    <button class="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="admin-view" class="content-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="total-polls">12</span>
+                        <div class="stat-label">Total Polls</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="active-polls-count">5</span>
+                        <div class="stat-label">Active Polls</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="total-votes">847</span>
+                        <div class="stat-label">Total Votes</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="feedback-count">156</span>
+                        <div class="stat-label">Feedback Received</div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">➕ Create New Poll</h2>
+                <div class="create-poll-form">
+                    <div class="form-group">
+                        <label for="poll-title">Poll Title:</label>
+                        <input type="text" id="poll-title" placeholder="e.g., Do you prefer offline exams?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="poll-description">Description (optional):</label>
+                        <textarea id="poll-description" placeholder="Provide additional context for the poll..." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="poll-category">Category:</label>
+                        <select id="poll-category">
+                            <option value="academic">Academic</option>
+                            <option value="events">Events</option>
+                            <option value="facilities">Facilities</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="food">Food & Cafeteria</option>
+                            <option value="sports">Sports</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Poll Options:</label>
+                        <div class="options-container" id="poll-options">
+                            <div class="option-input">
+                                <input type="text" placeholder="Option 1" class="poll-option-input">
+                                <button class="remove-option" onclick="removeOption(this)">×</button>
+                            </div>
+                            <div class="option-input">
+                                <input type="text" placeholder="Option 2" class="poll-option-input">
+                                <button class="remove-option" onclick="removeOption(this)">×</button>
+                            </div>
+                        </div>
+                        <button class="add-option" onclick="addOption()">+ Add Option</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="poll-duration">Poll Duration:</label>
+                        <select id="poll-duration">
+                            <option value="1">1 Day</option>
+                            <option value="3">3 Days</option>
+                            <option value="7" selected>1 Week</option>
+                            <option value="14">2 Weeks</option>
+                            <option value="30">1 Month</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="anonymous-poll"> Allow anonymous voting
+                        </label>
+                    </div>
+                    
+                    <button class="submit-btn" onclick="createPoll()">Create Poll</button>
+                </div>
+
+                <h2 class="section-title">📊 All Polls Management</h2>
+                <div class="polls-grid" id="admin-polls">
+                    <!-- All polls will be populated here -->
+                </div>
+
+                <h2 class="section-title">💬 Recent Feedback</h2>
+                <div class="feedback-cards" id="feedback-list">
+                    <!-- Feedback cards will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about-section" class="content-section">
+            <h2 class="section-title">About CampusLink Polls & Feedback System</h2>
+            
+            <div class="about-content">
+                <p style="font-size: 1.1rem; text-align: center; margin-bottom: 30px; color: #666;">
+                    CampusLink's Polls & Feedback system is designed to enhance communication and decision-making within your campus community. Our platform bridges the gap between administration and students, creating a transparent and engaging environment for everyone.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🗳️</span>
+                        <h3 class="feature-title">Interactive Polling</h3>
+                        <p class="feature-description">
+                            Create and participate in polls on various campus topics. From academic preferences to event planning, get real-time insights from the student community with beautiful visualizations and instant results.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">📊</span>
+                        <h3 class="feature-title">Real-time Results</h3>
+                        <p class="feature-description">
+                            Watch poll results update instantly as votes come in. Dynamic progress bars and percentage displays make it easy to understand community preferences at a glance.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">💬</span>
+                        <h3 class="feature-title">Comprehensive Feedback</h3>
+                        <p class="feature-description">
+                            Collect detailed feedback after events, on facilities, or any campus-related topics. Star ratings and detailed comments help identify areas for improvement.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">👥</span>
+                        <h3 class="feature-title">Role-based Access</h3>
+                        <p class="feature-description">
+                            Students can vote and provide feedback, while administrators have full dashboard access to create polls, analyze results, and manage the entire system.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🔒</span>
+                        <h3 class="feature-title">Privacy Options</h3>
+                        <p class="feature-description">
+                            Support for both anonymous and identified responses. Students can choose to provide feedback anonymously, encouraging honest and open communication.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">📈</span>
+                        <h3 class="feature-title">Analytics Dashboard</h3>
+                        <p class="feature-description">
+                            Comprehensive statistics and insights for administrators. Track participation rates, analyze trends, and make data-driven decisions for campus improvements.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 40px 0;">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center;">Key Features & Benefits</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div>
+                            <h4 style="color: #667eea; margin-bottom: 10px;">🎯 For Students</h4>
+                            <ul style="color: #666; line-height: 1.8;">
+                                <li>Vote on important campus decisions</li>
+                                <li>Provide feedback on events and services</li>
+                                <li>View real-time poll results</li>
+                                <li>Anonymous submission options</li>
+                                <li>Easy-to-use interface</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #667eea; margin-bottom: 10px;">⚡ For Administrators</h4>
+                            <ul style="color: #666; line-height: 1.8;">
+                                <li>Create polls with multiple options</li>
+                                <li>Set poll duration and categories</li>
+                                <li>Monitor feedback and ratings</li>
+                                <li>Access detailed analytics</li>
+                                <li>Manage all polls from one dashboard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 40px 0;">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px;">🚀 How It Works</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin: 30px 0;">
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; font-weight: bold;">1</div>
+                            <h4 style="color: #2c3e50; margin-bottom: 10px;">Create Poll</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Administrators create polls with multiple choice options and set duration</p>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; font-weight: bold;">2</div>
+                            <h4 style="color: #2c3e50; margin-bottom: 10px;">Students Vote</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Students participate by selecting their preferred options in active polls</p>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; font-weight: bold;">3</div>
+                            <h4 style="color: #2c3e50; margin-bottom: 10px;">View Results</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Real-time results with visual charts and percentage breakdowns</p>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; font-weight: bold;">4</div>
+                            <h4 style="color: #2c3e50; margin-bottom: 10px;">Collect Feedback</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Gather detailed feedback with ratings and comments for continuous improvement</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px; border-radius: 20px; text-align: center; margin: 40px 0;">
+                    <h3 style="margin-bottom: 20px; font-size: 1.8rem;">🎯 Why Choose CampusLink?</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; opacity: 0.9;">
+                        Our platform is built specifically for educational institutions, understanding the unique needs of campus communities. We make it easy to gather opinions, make decisions together, and create a more engaged campus environment.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px;">
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
+                            <div style="font-weight: 600;">Fast & Responsive</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;">🔐</div>
+                            <div style="font-weight: 600;">Secure & Private</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
+                            <div style="font-weight: 600;">Mobile Friendly</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;">🎨</div>
+                            <div style="font-weight: 600;">Modern Design</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="floating-action" onclick="scrollToTop()" title="Back to top">↑</button>
+
+    <script>
+        // Sample data
+        let polls = [
+            {
+                id: 1,
+                title: "Do you prefer offline exams?",
+                description: "Help us decide the examination format for the upcoming semester",
+                category: "academic",
+                status: "active",
+                createdDate: "2025-07-20",
+                endDate: "2025-07-30",
+                options: [
+                    { text: "Yes, offline only", votes: 156 },
+                    { text: "No, online only", votes: 89 },
+                    { text: "Hybrid approach", votes: 234 },
+                    { text: "No preference", votes: 43 }
+                ],
+                voted: false,
+                totalVotes: 522,
+                anonymous: true
+            },
+            {
+                id: 2,
+                title: "Best time for cultural events?",
+                description: "When should we schedule major cultural events?",
+                category: "events",
+                status: "active",
+                createdDate: "2025-07-18",
+                endDate: "2025-08-01",
+                options: [
+                    { text: "Evening (6-9 PM)", votes: 245 },
+                    { text: "Afternoon (2-5 PM)", votes: 123 },
+                    { text: "Night (7-10 PM)", votes: 187 },
+                    { text: "Weekend full day", votes: 201 }
+                ],
+                voted: true,
+                selectedOption: 0,
+                totalVotes: 756,
+                anonymous: false
+            },
+            {
+                id: 3,
+                title: "Cafeteria food quality improvement",
+                description: "What should be our priority for cafeteria improvements?",
+                category: "food",
+                status: "active",
+                createdDate: "2025-07-22",
+                endDate: "2025-07-29",
+                options: [
+                    { text: "More variety in menu", votes: 89 },
+                    { text: "Better quality ingredients", votes: 156 },
+                    { text: "Faster service", votes: 67 },
+                    { text: "Lower prices", votes: 134 }
+                ],
+                voted: false,
+                totalVotes: 446,
+                anonymous: true
+            },
+            {
+                id: 4,
+                title: "Library operating hours",
+                description: "Should we extend library hours during exam periods?",
+                category: "facilities",
+                status: "closed",
+                createdDate: "2025-07-15",
+                endDate: "2025-07-22",
+                options: [
+                    { text: "Yes, 24/7 during exams", votes: 289 },
+                    { text: "Extend to 11 PM", votes: 178 },
+                    { text: "Keep current hours", votes: 45 },
+                    { text: "Open early at 6 AM", votes: 92 }
+                ],
+                voted: true,
+                selectedOption: 0,
+                totalVotes: 604,
+                anonymous: false
+            }
+        ];
+
+        let feedbacks = [
+            {
+                id: 1,
+                event: "Annual Cultural Fest",
+                rating: 5,
+                text: "Amazing organization! The sound quality was excellent and the venue was perfect. Looking forward to next year's event. The variety of performances was outstanding.",
+                anonymous: false,
+                date: "2025-07-25",
+                name: "Priya Sharma"
+            },
+            {
+                id: 2,
+                event: "Tech Symposium 2025",
+                rating: 4,
+                text: "Great speakers and topics. However, the registration process could be smoother. Overall a valuable learning experience with cutting-edge technology discussions.",
+                anonymous: true,
+                date: "2025-07-24"
+            },
+            {
+                id: 3,
+                event: "Sports Meet",
+                rating: 3,
+                text: "Good sports facilities but timing could be better. More sports categories would be appreciated. The organization team did their best with available resources.",
+                anonymous: false,
+                date: "2025-07-23",
+                name: "Rahul Kumar"
+            },
+            {
+                id: 4,
+                event: "Library Services",
+                rating: 4,
+                text: "The new digital catalog system is very helpful. However, more study spaces are needed during exam periods. Staff is always helpful and courteous.",
+                anonymous: true,
+                date: "2025-07-22"
+            },
+            {
+                id: 5,
+                event: "Hostel Facilities",
+                rating: 3,
+                text: "Room cleanliness has improved but Wi-Fi connectivity issues persist. The mess food quality is good. Common areas need better maintenance.",
+                anonymous: false,
+                date: "2025-07-21",
+                name: "Anita Patel"
+            },
+            {
+                id: 6,
+                event: "Cafeteria",
+                rating: 2,
+                text: "Food variety is limited and prices are high. Service can be slow during peak hours. Would love to see more healthy options and regional cuisines.",
+                anonymous: true,
+                date: "2025-07-20"
+            }
+        ];
+
+        let currentRole = 'student';
+        let selectedRating = 0;
+        let currentTab = 'polls';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderActivePolls();
+            setupStarRating();
+            updateStats();
+        });
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Switch content sections
+            document.getElementById('polls-section').classList.toggle('active', tab === 'polls');
+            document.getElementById('about-section').classList.toggle('active', tab === 'about');
+        }
+
+        function switchRole(role) {
+            currentRole = role;
+            
+            // Update button states
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Switch content sections
+            document.querySelectorAll('#polls-section .content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(role + '-view').classList.add('active');
+            
+            if (role === 'student') {
+                renderActivePolls();
+            } else {
+                renderFeedbackList();
+                renderAllPolls();
+                updateStats();
+            }
+        }
+
+        function renderActivePolls() {
+            const container = document.getElementById('active-polls');
+            container.innerHTML = '';
+            
+            const activePolls = polls.filter(poll => poll.status === 'active');
+            
+            if (activePolls.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #666; padding: 40px;"><h3>No active polls at the moment</h3><p>Check back later for new polls!</p></div>';
+                return;
+            }
+            
+            activePolls.forEach(poll => {
+                const pollCard = createPollCard(poll);
+                container.appendChild(pollCard);
+            });
+        }
+
+        function renderAllPolls() {
+            const container = document.getElementById('admin-polls');
+            container.innerHTML = '';
+            
+            polls.forEach(poll => {
+                const pollCard = createAdminPollCard(poll);
+                container.appendChild(pollCard);
+            });
+        }
+
+        function createPollCard(poll) {
+            const card = document.createElement('div');
+            card.className = 'poll-card';
+            
+            const hasVoted = poll.voted;
+            const totalVotes = poll.totalVotes;
+            
+            card.innerHTML = `
+                <div class="poll-header">
+                    <h3 class="poll-title">${poll.title}</h3>
+                    <div class="poll-meta">
+                        <span>📅 Ends: ${formatDate(poll.endDate)}</span>
+                        <span class="poll-status status-${poll.status}">${poll.status.toUpperCase()}</span>
+                    </div>
+                    ${poll.description ? `<p style="color: #666; margin-bottom: 15px;">${poll.description}</p>` : ''}
+                </div>
+                
+                <div class="poll-options">
+                    ${poll.options.map((option, index) => {
+                        const percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
+                        const isSelected = hasVoted && poll.selectedOption === index;
+                        
+                        return `
+                            <div class="poll-option ${isSelected ? 'selected' : ''}" 
+                                 onclick="${!hasVoted ? `selectOption(${poll.id}, ${index})` : ''}">
+                                ${!hasVoted ? `<input type="radio" name="poll-${poll.id}" value="${index}">` : ''}
+                                <span class="option-text">${option.text}</span>
+                                ${hasVoted ? `<span class="option-percentage">${percentage}%</span>` : ''}
+                                ${hasVoted ? `<div class="progress-bar" style="width: ${percentage}%"></div>` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                ${hasVoted ? 
+                    `<div class="total-votes">Total votes: ${totalVotes.toLocaleString()}</div>` :
+                    `<button class="vote-btn" onclick="votePoll(${poll.id})">Submit Vote</button>`
+                }
+            `;
+            
+            return card;
+        }
+
+        function createAdminPollCard(poll) {
+            const card = document.createElement('div');
+            card.className = 'poll-card';
+            
+            const totalVotes = poll.totalVotes;
+            
+            card.innerHTML = `
+                <div class="poll-header">
+                    <h3 class="poll-title">${poll.title}</h3>
+                    <div class="poll-meta">
+                        <span>📅 Created: ${formatDate(poll.createdDate)}</span>
+                        <span class="poll-status status-${poll.status}">${poll.status.toUpperCase()}</span>
+                    </div>
+                    <div class="poll-meta">
+                        <span>📊 Category: ${poll.category}</span>
+                        <span>👥 ${totalVotes.toLocaleString()} votes</span>
+                    </div>
+                    ${poll.description ? `<p style="color: #666; margin-bottom: 15px;">${poll.description}</p>` : ''}
+                </div>
+                
+                <div class="poll-options">
+                    ${poll.options.map((option, index) => {
+                        const percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
+                        
+                        return `
+                            <div class="poll-option">
+                                <span class="option-text">${option.text}</span>
+                                <span class="option-percentage">${percentage}% (${option.votes})</span>
+                                <div class="progress-bar" style="width: ${percentage}%"></div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    ${poll.status === 'active' ? 
+                        `<button class="vote-btn" style="width: auto; padding: 8px 15px; background: #e74c3c;" onclick="closePoll(${poll.id})">Close Poll</button>` :
+                        `<button class="vote-btn" style="width: auto; padding: 8px 15px; background: #27ae60;" onclick="reopenPoll(${poll.id})">Reopen Poll</button>`
+                    }
+                    <button class="vote-btn" style="width: auto; padding: 8px 15px; background: #95a5a6;" onclick="deletePoll(${poll.id})">Delete</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function selectOption(pollId, optionIndex) {
+            // Remove previous selections
+            document.querySelectorAll(`input[name="poll-${pollId}"]`).forEach(input => {
+                input.checked = false;
+                input.parentElement.classList.remove('selected');
+            });
+            
+            // Select current option
+            const selectedInput = document.querySelector(`input[name="poll-${pollId}"][value="${optionIndex}"]`);
+            if (selectedInput) {
+                selectedInput.checked = true;
+                selectedInput.parentElement.classList.add('selected');
+            }
+        }
+
+        function votePoll(pollId) {
+            const selectedOption = document.querySelector(`input[name="poll-${pollId}"]:checked`);
+            
+            if (!selectedOption) {
+                showNotification('Please select an option before voting!', 'error');
+                return;
+            }
+            
+            const optionIndex = parseInt(selectedOption.value);
+            const poll = polls.find(p => p.id === pollId);
+            
+            if (poll) {
+                poll.options[optionIndex].votes++;
+                poll.totalVotes++;
+                poll.voted = true;
+                poll.selectedOption = optionIndex;
+                
+                // Re-render polls
+                renderActivePolls();
+                updateStats();
+                
+                // Show success message
+                showNotification('Vote submitted successfully! 🎉', 'success');
+            }
+        }
+
+        function setupStarRating() {
+            const stars = document.querySelectorAll('.star');
+            const ratingText = document.getElementById('rating-text');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStarDisplay();
+                    
+                    const ratingTexts = {
+                        1: '😞 Poor',
+                        2: '😐 Fair', 
+                        3: '🙂 Good',
+                        4: '😊 Very Good',
+                        5: '🤩 Excellent'
+                    };
+                    
+                    ratingText.textContent = ratingTexts[selectedRating];
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            document.getElementById('feedback-rating').addEventListener('mouseleave', function() {
+                updateStarDisplay();
+            });
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStarDisplay() {
+            highlightStars(selectedRating);
+        }
+
+        function submitFeedback() {
+            const eventSelect = document.getElementById('event-select');
+            const feedbackText = document.getElementById('feedback-text');
+            const anonymousCheckbox = document.getElementById('anonymous-feedback');
+            
+            if (!eventSelect.value) {
+                showNotification('Please select an event/topic!', 'error');
+                return;
+            }
+            
+            if (!selectedRating) {
+                showNotification('Please provide a rating!', 'error');
+                return;
+            }
+            
+            if (!feedbackText.value.trim()) {
+                showNotification('Please enter your feedback!', 'error');
+                return;
+            }
+            
+            const newFeedback = {
+                id: feedbacks.length + 1,
+                event: eventSelect.options[eventSelect.selectedIndex].text,
+                rating: selectedRating,
+                text: feedbackText.value.trim(),
+                anonymous: anonymousCheckbox.checked,
+                date: new Date().toISOString().split('T')[0],
+                name: anonymousCheckbox.checked ? null : 'Current User'
+            };
+            
+            feedbacks.unshift(newFeedback);
+            
+            // Clear form
+            eventSelect.value = '';
+            feedbackText.value = '';
+            anonymousCheckbox.checked = false;
+            selectedRating = 0;
+            updateStarDisplay();
+            document.getElementById('rating-text').textContent = 'Click to rate';
+            
+            // Update stats and re-render if in admin view
+            updateStats();
+            if (currentRole === 'admin') {
+                renderFeedbackList();
+            }
+            
+            showNotification('Feedback submitted successfully! 🙏', 'success');
+        }
+
+        function addOption() {
+            const optionsContainer = document.getElementById('poll-options');
+            const optionCount = optionsContainer.children.length;
+            
+            if (optionCount >= 6) {
+                showNotification('Maximum 6 options allowed!', 'error');
+                return;
+            }
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-input';
+            optionDiv.innerHTML = `
+                <input type="text" placeholder="Option ${optionCount + 1}" class="poll-option-input">
+                <button class="remove-option" onclick="removeOption(this)">×</button>
+            `;
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+
+        function removeOption(button) {
+            const optionsContainer = document.getElementById('poll-options');
+            
+            if (optionsContainer.children.length <= 2) {
+                showNotification('At least 2 options are required!', 'error');
+                return;
+            }
+            
+            button.parentElement.remove();
+        }
+
+        function createPoll() {
+            const title = document.getElementById('poll-title').value.trim();
+            const description = document.getElementById('poll-description').value.trim();
+            const category = document.getElementById('poll-category').value;
+            const duration = parseInt(document.getElementById('poll-duration').value);
+            const anonymous = document.getElementById('anonymous-poll').checked;
+            
+            const optionInputs = document.querySelectorAll('.poll-option-input');
+            const options = [];
+            
+            optionInputs.forEach(input => {
+                if (input.value.trim()) {
+                    options.push({ text: input.value.trim(), votes: 0 });
+                }
+            });
+            
+            if (!title) {
+                showNotification('Please provide a poll title!', 'error');
+                return;
+            }
+            
+            if (options.length < 2) {
+                showNotification('Please provide at least 2 options!', 'error');
+                return;
+            }
+            
+            const newPoll = {
+                id: polls.length + 1,
+                title,
+                description,
+                category,
+                status: 'active',
+                createdDate: new Date().toISOString().split('T')[0],
+                endDate: getEndDate(duration),
+                options,
+                voted: false,
+                totalVotes: 0,
+                anonymous
+            };
+            
+            polls.unshift(newPoll);
+            
+            // Clear form
+            document.getElementById('poll-title').value = '';
+            document.getElementById('poll-description').value = '';
+            document.getElementById('poll-category').value = 'academic';
+            document.getElementById('poll-duration').value = '7';
+            document.getElementById('anonymous-poll').checked = false;
+            
+            // Reset options
+            const optionsContainer = document.getElementById('poll-options');
+            optionsContainer.innerHTML = `
+                <div class="option-input">
+                    <input type="text" placeholder="Option 1" class="poll-option-input">
+                    <button class="remove-option" onclick="removeOption(this)">×</button>
+                </div>
+                <div class="option-input">
+                    <input type="text" placeholder="Option 2" class="poll-option-input">
+                    <button class="remove-option" onclick="removeOption(this)">×</button>
+                </div>
+            `;
+            
+            // Update displays
+            renderAllPolls();
+            updateStats();
+            
+            showNotification('Poll created successfully! 🎉', 'success');
+        }
+
+        function closePoll(pollId) {
+            const poll = polls.find(p => p.id === pollId);
+            if (poll) {
+                poll.status = 'closed';
+                renderAllPolls();
+                renderActivePolls();
+                updateStats();
+                showNotification('Poll closed successfully!', 'success');
+            }
+        }
+
+        function reopenPoll(pollId) {
+            const poll = polls.find(p => p.id === pollId);
+            if (poll) {
+                poll.status = 'active';
+                renderAllPolls();
+                renderActivePolls();
+                updateStats();
+                showNotification('Poll reopened successfully!', 'success');
+            }
+        }
+
+        function deletePoll(pollId) {
+            if (confirm('Are you sure you want to delete this poll? This action cannot be undone.')) {
+                const pollIndex = polls.findIndex(p => p.id === pollId);
+                if (pollIndex !== -1) {
+                    polls.splice(pollIndex, 1);
+                    renderAllPolls();
+                    renderActivePolls();
+                    updateStats();
+                    showNotification('Poll deleted successfully!', 'success');
+                }
+            }
+        }
+
+        function renderFeedbackList() {
+            const container = document.getElementById('feedback-list');
+            container.innerHTML = '';
+            
+            if (feedbacks.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #666; padding: 40px;"><h3>No feedback received yet</h3><p>Feedback will appear here once students start submitting.</p></div>';
+                return;
+            }
+            
+            feedbacks.slice(0, 10).forEach(feedback => {
+                const feedbackCard = createFeedbackCard(feedback);
+                container.appendChild(feedbackCard);
+            });
+        }
+
+        function createFeedbackCard(feedback) {
+            const card = document.createElement('div');
+            card.className = 'feedback-card';
+            
+            const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
+            
+            card.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-rating">${stars}</div>
+                    <div class="feedback-date">${formatDate(feedback.date)}</div>
+                </div>
+                <div class="feedback-text">${feedback.text}</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <div class="feedback-event">${feedback.event}</div>
+                    <div style="color: #7f8c8d; font-size: 0.8rem;">
+                        ${feedback.anonymous ? '👤 Anonymous' : `👤 ${feedback.name}`}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function updateStats() {
+            const totalPolls = polls.length;
+            const activePolls = polls.filter(p => p.status === 'active').length;
+            const totalVotes = polls.reduce((sum, poll) => sum + poll.totalVotes, 0);
+            const feedbackCount = feedbacks.length;
+            
+            document.getElementById('total-polls').textContent = totalPolls;
+            document.getElementById('active-polls-count').textContent = activePolls;
+            document.getElementById('total-votes').textContent = totalVotes.toLocaleString();
+            document.getElementById('feedback-count').textContent = feedbackCount;
+        }
+
+        function getEndDate(daysFromNow) {
+            const date = new Date();
+            date.setDate(date.getDate() + daysFromNow);
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Auto-update stats periodically (simulating real-time data)
+        setInterval(() => {
+            if (currentRole === 'admin') {
+                updateStats();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

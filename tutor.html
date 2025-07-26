@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials - CampusLink</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .stats-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #f8f9fa, #ffffff);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input, .filter-select {
+            padding: 12px 16px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: #667eea;
+        }
+
+        .view-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .subject-tabs {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tutorial-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tutorial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .tutorial-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            overflow: hidden;
+        }
+
+        .tutorial-thumbnail.video {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .tutorial-thumbnail.document {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .tutorial-thumbnail.interactive {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .play-overlay {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.6);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-overlay:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .tutorial-content {
+            padding: 25px;
+        }
+
+        .tutorial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .tutorial-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .tutorial-type {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tutorial-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .tutorial-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tutorial-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid #e9ecef;
+        }
+
+        .tutorial-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .secondary-btn {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .secondary-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: 2px solid #f39c12;
+            color: #f39c12;
+            width: 50px;
+            flex: none;
+        }
+
+        .bookmark-btn.bookmarked {
+            background: #f39c12;
+            color: white;
+        }
+
+        .bookmark-btn:hover {
+            background: #f39c12;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+            grid-column: 1 / -1;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #95a5a6;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: #f1f2f6;
+            color: #2c3e50;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .tutorial-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-filters {
+                justify-content: center;
+            }
+            
+            .tutorials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tabs-container {
+                justify-content: center;
+            }
+        }
+
+        .animate-in {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #f39c12;
+        }
+
+        .difficulty-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .upload-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header animate-in">
+            <h1>📚 Tutorials & Learning Resources</h1>
+            <p>Access comprehensive study materials, video tutorials, and interactive learning content</p>
+        </div>
+
+        <div class="stats-bar animate-in">
+            <div class="stat-item">
+                <div class="stat-number" id="totalTutorials">156</div>
+                <div class="stat-label">Total Tutorials</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="videoCount">89</div>
+                <div class="stat-label">Video Lessons</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="documentCount">45</div>
+                <div class="stat-label">Documents</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="interactiveCount">22</div>
+                <div class="stat-label">Interactive</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="completedCount">34</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+
+        <div class="controls animate-in">
+            <div class="search-filters">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search tutorials...">
+                <select class="filter-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="video">Video Tutorials</option>
+                    <option value="document">Documents</option>
+                    <option value="interactive">Interactive</option>
+                </select>
+                <select class="filter-select" id="difficultyFilter">
+                    <option value="">All Levels</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid">🔲 Grid</button>
+                <button class="view-btn" data-view="list">📋 List</button>
+            </div>
+            <button class="upload-btn" onclick="openUploadModal()">
+                <span>📤</span> Upload Tutorial
+            </button>
+        </div>
+
+        <div class="subject-tabs animate-in">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-subject="all">All Subjects</button>
+                <button class="tab-btn" data-subject="mathematics">Mathematics</button>
+                <button class="tab-btn" data-subject="physics">Physics</button>
+                <button class="tab-btn" data-subject="chemistry">Chemistry</button>
+                <button class="tab-btn" data-subject="computer-science">Computer Science</button>
+                <button class="tab-btn" data-subject="biology">Biology</button>
+                <button class="tab-btn" data-subject="english">English</button>
+            </div>
+        </div>
+
+        <div class="tutorials-grid" id="tutorialsGrid">
+            <!-- Tutorials will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Tutorial Viewer Modal -->
+    <div class="modal" id="tutorialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="modalTitle">Tutorial Title</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeTutorialModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container" id="videoContainer">
+                    <p>📹 Video player would load here</p>
+                </div>
+                <div class="tutorial-details" id="tutorialDetails">
+                    <!-- Tutorial details will be populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Tutorial Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload New Tutorial</h2>
+                <button class="close-btn" onclick="closeUploadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="upload-form" id="uploadForm">
+                    <div class="form-group">
+                        <label class="form-label">Tutorial Title</label>
+                        <input type="text" class="form-input" id="tutorialTitle" required placeholder="Enter tutorial title">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select" id="tutorialSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="biology">Biology</option>
+                            <option value="english">English</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-select" id="tutorialType" required>
+                            <option value="">Select Type</option>
+                            <option value="video">Video Tutorial</option>
+                            <option value="document">Document</option>
+                            <option value="interactive">Interactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Difficulty Level</label>
+                        <select class="form-select" id="tutorialDifficulty" required>
+                            <option value="">Select Difficulty</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="tutorialDescription" required placeholder="Describe what this tutorial covers..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tags (comma separated)</label>
+                        <input type="text" class="form-input" id="tutorialTags" placeholder="e.g., calculus, derivatives, limits">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload File</label>
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <div class="file-upload-icon">📁</div>
+                            <p>Click to upload or drag and drop your file here</p>
+                            <p style="font-size: 0.9rem; color: #7f8c8d; margin-top: 10px;">Supported: MP4, PDF, PPTX, DOCX (Max 100MB)</p>
+                        </div>
+                        <input type="file" id="fileInput" style="display: none;" accept=".mp4,.pdf,.pptx,.docx">
+                    </div>
+                    <button type="submit" class="primary-btn action-btn">Upload Tutorial</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample tutorial data
+        let tutorials = [
+            {
+                id: 1,
+                title: "Introduction to Calculus - Limits and Continuity",
+                subject: "mathematics",
+                type: "video",
+                difficulty: "beginner",
+                description: "Learn the fundamental concepts of limits and continuity in calculus. Perfect for beginners starting their calculus journey.",
+                duration: "45 min",
+                rating: 4.8,
+                views: 1240,
+                tags: ["calculus", "limits", "continuity", "basics"],
+                instructor: "Dr. Sarah Johnson",
+                uploadDate: "2024-01-15",
+                completed: false,
+                bookmarked: false,
+                progress: 0
+            },
+            {
+                id: 2,
+                title: "Quantum Mechanics: Wave-Particle Duality",
+                subject: "physics",
+                type: "video",
+                difficulty: "advanced",
+                description: "Explore the fascinating concept of wave-particle duality in quantum mechanics with practical examples and mathematical proofs.",
+                duration: "1h 20min",
+                rating: 4.9,
+                views: 856,
+                tags: ["quantum", "wave-particle", "duality", "mechanics"],
+                instructor: "Prof. Michael Chen",
+                uploadDate: "2024-01-12",
+                completed: true,
+                bookmarked: true,
+                progress: 100
+            },
+            {
+                id: 3,
+                title: "Organic Chemistry Reactions Cheat Sheet",
+                subject: "chemistry",
+                type: "document",
+                difficulty: "intermediate",
+                description: "Comprehensive reference guide covering all major organic chemistry reactions with mechanisms and examples.",
+                duration: "Reference",
+                rating: 4.7,
+                views: 2100,
+                tags: ["organic", "reactions", "mechanisms", "reference"],
+                instructor: "Dr. Emily Rodriguez",
+                uploadDate: "2024-01-10",
+                completed: false,
+                bookmarked: false,
+                progress: 30
+            },
+            {
+                id: 4,
+                title: "Interactive Python Programming Simulator",
+                subject: "computer-science",
+                type: "interactive",
+                difficulty: "beginner",
+                description: "Hands-on coding environment to practice Python basics with real-time feedback and guided exercises.",
+                duration: "Self-paced",
+                rating: 4.6,
+                views: 1580,
+                tags: ["python", "programming", "coding", "interactive"],
+                instructor: "Prof. David Kim",
+                uploadDate: "2024-01-08",
+                completed: false,
+                bookmarked: true,
+                progress: 65
+            },
+            {
+                id: 5,
+                title: "Cell Biology: Mitosis and Meiosis",
+                subject: "biology",
+                type: "video",
+                difficulty: "intermediate",
+                description: "Detailed explanation of cell division processes including mitosis and meiosis with animations and diagrams.",
+                duration: "55 min",
+                rating: 4.8,
+                views: 980,
+                tags: ["cell biology", "mitosis", "meiosis", "division"],
+                instructor: "Dr. Lisa Anderson",
+                uploadDate: "2024-01-05",
+                completed: false,
+                bookmarked: false,
+                progress: 0
+            },
+            {
+                id: 6,
+                title: "Shakespeare's Hamlet: Literary Analysis",
+                subject: "english",
+                type: "document",
+                difficulty: "advanced",
+                description: "In-depth analysis of Hamlet's themes, characters, and literary devices with essay examples and critical perspectives.",
+                duration: "Study Guide",
+                rating: 4.5,
+                views: 750,
+                tags: ["shakespeare", "hamlet", "literature", "analysis"],
+                instructor: "Prof. Margaret Wilson",
+                uploadDate: "2024-01-03",
+                completed: false,
+                bookmarked: false,
+                progress: 15
+            },
+            {
+                id: 7,
+                title: "Linear Algebra: Matrix Operations",
+                subject: "mathematics",
+                type: "video",
+                difficulty: "intermediate",
+                description: "Master matrix operations including multiplication, determinants, and eigenvalues with step-by-step examples.",
+                duration: "1h 15min",
+                rating: 4.7,
+                views: 1350,
+                tags: ["linear algebra", "matrices", "operations", "eigenvalues"],
+                instructor: "Dr. Robert Martinez",
+                uploadDate: "2024-01-01",
+                completed: false,
+                bookmarked: false,
+                progress: 0
+            },
+            {
+                id: 8,
+                title: "Thermodynamics Laws Interactive Quiz",
+                subject: "physics",
+                type: "interactive",
+                difficulty: "beginner",
+                description: "Test your understanding of thermodynamics laws with interactive questions and immediate feedback.",
+                duration: "30 min",
+                rating: 4.4,
+                views: 670,
+                tags: ["thermodynamics", "laws", "quiz", "interactive"],
+                instructor: "Dr. James Thompson",
+                uploadDate: "2023-12-28",
+                completed: true,
+                bookmarked: false,
+                progress: 100
+            }
+        ];
+
+        // DOM elements
+        const tutorialsGrid = document.getElementById('tutorialsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        const tutorialModal = document.getElementById('tutorialModal');
+        const uploadModal = document.getElementById('uploadModal');
+
+        let currentSubject = 'all';
+        let currentView = 'grid';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTutorials();
+            updateStats();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search and filters
+            searchInput.addEventListener('input', filterTutorials);
+            typeFilter.addEventListener('change', filterTutorials);
+            difficultyFilter.addEventListener('change', filterTutorials);
+
+            // Subject tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSubject = this.dataset.subject;
+                    filterTutorials();
+                });
+            });
+
+            // View toggle
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentView = this.dataset.view;
+                    renderTutorials();
+                });
+            });
+
+            // Upload form
+            document.getElementById('uploadForm').addEventListener('submit', handleUploadSubmit);
+
+            // File input change
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+            // Close modals when clicking outside
+            tutorialModal.addEventListener('click', function(e) {
+                if (e.target === this) closeTutorialModal();
+            });
+
+            uploadModal.addEventListener('click', function(e) {
+                if (e.target === this) closeUploadModal();
+            });
+        }
+
+        // Render tutorials
+        function renderTutorials(tutorialsToRender = null) {
+            const tutorialsData = tutorialsToRender || filterTutorialData();
+            
+            if (tutorialsData.length === 0) {
+                tutorialsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <h3>No tutorials found</h3>
+                        <p>Try adjusting your search criteria or upload a new tutorial!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            tutorialsGrid.innerHTML = tutorialsData.map(tutorial => {
+                const typeIcon = {
+                    video: '🎥',
+                    document: '📄',
+                    interactive: '🎮'
+                };
+
+                const difficultyClass = `difficulty-${tutorial.difficulty}`;
+                
+                return `
+                    <div class="tutorial-card animate-in">
+                        <div class="tutorial-thumbnail ${tutorial.type}">
+                            <span>${typeIcon[tutorial.type]}</span>
+                            ${tutorial.type === 'video' ? `
+                                <div class="play-overlay" onclick="openTutorial(${tutorial.id})">
+                                    <span>▶</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <div class="tutorial-header">
+                                <div>
+                                    <h3 class="tutorial-title">${tutorial.title}</h3>
+                                    <div class="tutorial-meta">
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>${tutorial.duration}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👁️</span>
+                                            <span>${tutorial.views.toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="tutorial-type">${tutorial.type.charAt(0).toUpperCase() + tutorial.type.slice(1)}</span>
+                            </div>
+                            
+                            <p class="tutorial-description">${tutorial.description}</p>
+                            
+                            <div class="tutorial-meta">
+                                <div class="rating">
+                                    <span>⭐</span>
+                                    <span>${tutorial.rating}</span>
+                                </div>
+                                <span class="difficulty-badge ${difficultyClass}">
+                                    ${tutorial.difficulty.charAt(0).toUpperCase() + tutorial.difficulty.slice(1)}
+                                </span>
+                            </div>
+                            
+                            <div class="tutorial-tags">
+                                ${tutorial.tags.slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                ${tutorial.tags.length > 3 ? `<span class="tag">+${tutorial.tags.length - 3}</span>` : ''}
+                            </div>
+                            
+                            ${tutorial.progress > 0 ? `
+                                <div class="progress-bar" style="margin-bottom: 15px;">
+                                    <div class="progress-fill" style="width: ${tutorial.progress}%"></div>
+                                </div>
+                                <div style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 15px;">
+                                    Progress: ${tutorial.progress}%
+                                </div>
+                            ` : ''}
+                            
+                            <div class="tutorial-actions">
+                                <button class="action-btn primary-btn" onclick="openTutorial(${tutorial.id})">
+                                    <span>${tutorial.completed ? '✅' : tutorial.progress > 0 ? '▶️' : '🚀'}</span>
+                                    ${tutorial.completed ? 'Review' : tutorial.progress > 0 ? 'Continue' : 'Start'}
+                                </button>
+                                <button class="action-btn bookmark-btn ${tutorial.bookmarked ? 'bookmarked' : ''}" 
+                                        onclick="toggleBookmark(${tutorial.id})">
+                                    <span>🔖</span>
+                                </button>
+                            </div>
+                            
+                            <div style="margin-top: 15px; font-size: 0.9rem; color: #95a5a6;">
+                                By ${tutorial.instructor} • ${formatDate(tutorial.uploadDate)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter tutorial data
+        function filterTutorialData() {
+            return tutorials.filter(tutorial => {
+                const matchesSearch = tutorial.title.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+                                    tutorial.description.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+                                    tutorial.tags.some(tag => tag.toLowerCase().includes(searchInput.value.toLowerCase()));
+                
+                const matchesSubject = currentSubject === 'all' || tutorial.subject === currentSubject;
+                const matchesType = !typeFilter.value || tutorial.type === typeFilter.value;
+                const matchesDifficulty = !difficultyFilter.value || tutorial.difficulty === difficultyFilter.value;
+                
+                return matchesSearch && matchesSubject && matchesType && matchesDifficulty;
+            });
+        }
+
+        // Apply filters
+        function filterTutorials() {
+            renderTutorials();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const videoCount = tutorials.filter(t => t.type === 'video').length;
+            const documentCount = tutorials.filter(t => t.type === 'document').length;
+            const interactiveCount = tutorials.filter(t => t.type === 'interactive').length;
+            const completedCount = tutorials.filter(t => t.completed).length;
+
+            document.getElementById('totalTutorials').textContent = tutorials.length;
+            document.getElementById('videoCount').textContent = videoCount;
+            document.getElementById('documentCount').textContent = documentCount;
+            document.getElementById('interactiveCount').textContent = interactiveCount;
+            document.getElementById('completedCount').textContent = completedCount;
+        }
+
+        // Open tutorial viewer
+        function openTutorial(tutorialId) {
+            const tutorial = tutorials.find(t => t.id === tutorialId);
+            if (!tutorial) return;
+
+            document.getElementById('modalTitle').textContent = tutorial.title;
+            document.getElementById('progressFill').style.width = tutorial.progress + '%';
+            
+            // Simulate video loading or document display
+            const videoContainer = document.getElementById('videoContainer');
+            if (tutorial.type === 'video') {
+                videoContainer.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: #000; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">🎥</div>
+                            <p>Video: ${tutorial.title}</p>
+                            <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Duration: ${tutorial.duration}</p>
+                        </div>
+                    </div>
+                `;
+            } else if (tutorial.type === 'document') {
+                videoContainer.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: #f8f9fa; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #333; font-size: 1.2rem; border: 2px dashed #dee2e6;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">📄</div>
+                            <p>Document: ${tutorial.title}</p>
+                            <button class="primary-btn action-btn" style="margin-top: 15px;">Open Document</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                videoContainer.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #9b59b6, #8e44ad); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">🎮</div>
+                            <p>Interactive: ${tutorial.title}</p>
+                            <button class="primary-btn action-btn" style="margin-top: 15px; background: rgba(255,255,255,0.2);">Launch Interactive</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Tutorial details
+            document.getElementById('tutorialDetails').innerHTML = `
+                <h4 style="margin-bottom: 15px; color: #2c3e50;">About this tutorial</h4>
+                <p style="margin-bottom: 15px; line-height: 1.6;">${tutorial.description}</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <strong>Instructor:</strong><br>
+                        ${tutorial.instructor}
+                    </div>
+                    <div>
+                        <strong>Difficulty:</strong><br>
+                        <span class="difficulty-badge difficulty-${tutorial.difficulty}">${tutorial.difficulty.charAt(0).toUpperCase() + tutorial.difficulty.slice(1)}</span>
+                    </div>
+                    <div>
+                        <strong>Duration:</strong><br>
+                        ${tutorial.duration}
+                    </div>
+                    <div>
+                        <strong>Rating:</strong><br>
+                        <div class="rating">⭐ ${tutorial.rating} (${tutorial.views} views)</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <strong>Tags:</strong><br>
+                    <div class="tutorial-tags" style="margin-top: 8px;">
+                        ${tutorial.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="primary-btn action-btn" onclick="startTutorial(${tutorial.id})">
+                        ${tutorial.completed ? '🔄 Review Again' : tutorial.progress > 0 ? '▶️ Continue Learning' : '🚀 Start Learning'}
+                    </button>
+                    <button class="secondary-btn action-btn" onclick="toggleBookmark(${tutorial.id}); updateModalBookmark(${tutorial.id})">
+                        ${tutorial.bookmarked ? '🔖 Bookmarked' : '🔖 Bookmark'}
+                    </button>
+                    <button class="secondary-btn action-btn" onclick="downloadTutorial(${tutorial.id})">
+                        📥 Download
+                    </button>
+                </div>
+            `;
+
+            tutorialModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close tutorial modal
+        function closeTutorialModal() {
+            tutorialModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Start/continue tutorial
+        function startTutorial(tutorialId) {
+            const tutorial = tutorials.find(t => t.id === tutorialId);
+            if (!tutorial) return;
+
+            // Simulate starting tutorial
+            if (tutorial.progress === 0) {
+                tutorial.progress = 10;
+                showNotification(`Started "${tutorial.title}"!`, 'success');
+            } else if (tutorial.progress < 100) {
+                tutorial.progress = Math.min(tutorial.progress + 25, 100);
+                showNotification(`Progress updated to ${tutorial.progress}%!`, 'info');
+            }
+
+            if (tutorial.progress === 100) {
+                tutorial.completed = true;
+                showNotification(`Congratulations! You completed "${tutorial.title}"!`, 'success');
+            }
+
+            // Update display
+            document.getElementById('progressFill').style.width = tutorial.progress + '%';
+            renderTutorials();
+            updateStats();
+        }
+
+        // Toggle bookmark
+        function toggleBookmark(tutorialId) {
+            const tutorial = tutorials.find(t => t.id === tutorialId);
+            if (!tutorial) return;
+
+            tutorial.bookmarked = !tutorial.bookmarked;
+            const action = tutorial.bookmarked ? 'added to' : 'removed from';
+            showNotification(`Tutorial ${action} bookmarks!`, 'info');
+            
+            renderTutorials();
+        }
+
+        // Update modal bookmark button
+        function updateModalBookmark(tutorialId) {
+            // This would update the bookmark button in the modal
+            openTutorial(tutorialId); // Refresh modal content
+        }
+
+        // Download tutorial (simulation)
+        function downloadTutorial(tutorialId) {
+            const tutorial = tutorials.find(t => t.id === tutorialId);
+            if (!tutorial) return;
+
+            showNotification(`Downloading "${tutorial.title}"...`, 'info');
+            
+            // Simulate download
+            setTimeout(() => {
+                showNotification('Download completed!', 'success');
+            }, 2000);
+        }
+
+        // Open upload modal
+        function openUploadModal() {
+            uploadModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close upload modal
+        function closeUploadModal() {
+            uploadModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('uploadForm').reset();
+        }
+
+        // Handle file selection
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileUpload = document.querySelector('.file-upload');
+                fileUpload.innerHTML = `
+                    <div class="file-upload-icon">✅</div>
+                    <p><strong>Selected:</strong> ${file.name}</p>
+                    <p style="font-size: 0.9rem; color: #7f8c8d; margin-top: 10px;">Size: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                `;
+            }
+        }
+
+        // Handle upload form submission
+        function handleUploadSubmit(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('tutorialTitle').value);
+            formData.append('subject', document.getElementById('tutorialSubject').value);
+            formData.append('type', document.getElementById('tutorialType').value);
+            formData.append('difficulty', document.getElementById('tutorialDifficulty').value);
+            formData.append('description', document.getElementById('tutorialDescription').value);
+            formData.append('tags', document.getElementById('tutorialTags').value);
+            
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files[0]) {
+                formData.append('file', fileInput.files[0]);
+            }
+
+            // Simulate upload
+            showNotification('Uploading tutorial...', 'info');
+
+            setTimeout(() => {
+                // Add new tutorial to the array
+                const newTutorial = {
+                    id: tutorials.length + 1,
+                    title: formData.get('title'),
+                    subject: formData.get('subject'),
+                    type: formData.get('type'),
+                    difficulty: formData.get('difficulty'),
+                    description: formData.get('description'),
+                    duration: formData.get('type') === 'video' ? '30 min' : formData.get('type') === 'document' ? 'Reference' : 'Self-paced',
+                    rating: 0,
+                    views: 0,
+                    tags: formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag),
+                    instructor: 'You',
+                    uploadDate: new Date().toISOString().split('T')[0],
+                    completed: false,
+                    bookmarked: false,
+                    progress: 0
+                };
+
+                tutorials.unshift(newTutorial);
+                closeUploadModal();
+                renderTutorials();
+                updateStats();
+                showNotification('Tutorial uploaded successfully!', 'success');
+            }, 3000);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+                max-width: 300px;
+                font-weight: 600;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in forwards';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

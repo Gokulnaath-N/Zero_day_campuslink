@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About CampusLink - Centralized Student Utility Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .vision-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .vision-box h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .vision-text {
+            font-size: 1.1rem;
+            text-align: center;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .feature-list li {
+            padding: 5px 0;
+            color: #555;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .advanced-features {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .advanced-features h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .advanced-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-item:hover {
+            transform: scale(1.05);
+        }
+
+        .advanced-item h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .advanced-item p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .feature-card, .vision-box, .advanced-features, .stats-section {
+                padding: 20px;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">🎓 CampusLink</div>
+            <div class="tagline">A Centralized Student Utility Hub</div>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-top: 15px;">Empowering students with an all-in-one productivity and campus life support system</p>
+        </header>
+
+        <div class="vision-box">
+            <h2>🎯 Our Vision</h2>
+            <p class="vision-text">
+                CampusLink is a unified platform built to modernize and streamline student and administrative services within college campuses. We centralize essential utilities—announcements, scheduling, skill sharing, lost-and-found, hostel complaints, and more—into one beautifully crafted portal, providing personalized access, efficiency, and accessibility for the modern student experience.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">📢</span>
+                <h3 class="feature-title">Smart Announcements</h3>
+                <p class="feature-description">Stay informed instantly with our intelligent announcement system.</p>
+                <ul class="feature-list">
+                    <li>Categorized notifications (Events, Exams, Holidays)</li>
+                    <li>Priority pinning for urgent notices</li>
+                    <li>Scheduled auto-publishing</li>
+                    <li>Tag-based subscriptions</li>
+                    <li>PDF export for schedules</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔍</span>
+                <h3 class="feature-title">Lost & Found Tracker</h3>
+                <p class="feature-description">Smart matching system to reunite you with your belongings.</p>
+                <ul class="feature-list">
+                    <li>Detailed item reporting with images</li>
+                    <li>Smart category filtering</li>
+                    <li>Automated match suggestions</li>
+                    <li>Email notifications for matches</li>
+                    <li>Location-based search</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🏠</span>
+                <h3 class="feature-title">Hostel Complaint System</h3>
+                <p class="feature-description">Raise, track, and resolve hostel issues efficiently.</p>
+                <ul class="feature-list">
+                    <li>Categorized complaint submission</li>
+                    <li>Real-time status tracking</li>
+                    <li>Admin assignment dashboard</li>
+                    <li>Quality rating system</li>
+                    <li>Escalation management</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📅</span>
+                <h3 class="feature-title">Smart Timetable Scheduler</h3>
+                <p class="feature-description">Map your week with intelligent scheduling tools.</p>
+                <ul class="feature-list">
+                    <li>Drag-and-drop class blocks</li>
+                    <li>Color-coded subject organization</li>
+                    <li>Smart time slot suggestions</li>
+                    <li>Shareable group schedules</li>
+                    <li>Cloud-synced backups</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🤝</span>
+                <h3 class="feature-title">Skill Exchange Marketplace</h3>
+                <p class="feature-description">Learn from your peers in a collaborative environment.</p>
+                <ul class="feature-list">
+                    <li>Peer-to-peer skill teaching</li>
+                    <li>Session booking system</li>
+                    <li>Rating and review system</li>
+                    <li>Achievement badges</li>
+                    <li>Group workshop support</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Polls & Feedback</h3>
+                <p class="feature-description">Engage the campus community with interactive polls and feedback collection.</p>
+                <ul class="feature-list">
+                    <li>Admin-created campus polls</li>
+                    <li>Real-time voting and results</li>
+                    <li>Event feedback collection</li>
+                    <li>Anonymous response options</li>
+                    <li>Data analytics dashboard</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="advanced-features">
+            <h2>🚀 Advanced Features</h2>
+            <div class="advanced-grid">
+                <div class="advanced-item">
+                    <h3>🔄 API-Ready Modules</h3>
+                    <p>Modular services for easy third-party integration</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>📊 Usage Analytics</h3>
+                    <p>Track engagement for better resource planning</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🧠 AI Assistant Bot</h3>
+                    <p>Smart FAQ handling and service routing</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🧩 Microservices</h3>
+                    <p>Scalable architecture for easy maintenance</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🛒 Campus Store</h3>
+                    <p>Integrated merchandise and branding portal</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🌍 Multilingual</h3>
+                    <p>Support for Hindi, Tamil, and English</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🏷️ Feature Flags</h3>
+                    <p>Customizable modules per institution</p>
+                </div>
+                <div class="advanced-item">
+                    <h3>🔐 Secure Access</h3>
+                    <p>Role-based authentication with OTP</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2>📈 Why Choose CampusLink?</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">8+</span>
+                    <div class="stat-label">Integrated Services</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">Mobile Responsive</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <div class="stat-label">System Availability</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <div class="stat-label">Language Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

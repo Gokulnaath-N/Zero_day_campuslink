@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header', { user: user }) %>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="hero-content">
+                <h1 class="hero-title">Lost & Found</h1>
+                <p class="hero-subtitle">Help reunite lost items with their owners</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="openModal('reportLostModal')">
+                        <i class="fas fa-search"></i> Report Lost Item
+                    </button>
+                    <button class="btn btn-secondary" onclick="openModal('reportFoundModal')">
+                        <i class="fas fa-hand-holding"></i> Report Found Item
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-bar">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All Items</button>
+                        <button class="filter-tab" data-filter="lost">Lost Items</button>
+                        <button class="filter-tab" data-filter="found">Found Items</button>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search items..." id="searchInput">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Items Grid -->
+        <section class="items-section">
+            <div class="container">
+                <div class="items-grid" id="itemsGrid">
+                    <!-- Items will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Report Lost Item Modal -->
+    <div class="modal" id="reportLostModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Report Lost Item</h3>
+                <button class="close-btn" onclick="closeModal('reportLostModal')">&times;</button>
+            </div>
+            <form id="reportLostForm" class="modal-form">
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" name="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="books">Books</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Last Seen Location</label>
+                    <input type="text" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Information</label>
+                    <input type="text" name="contact" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Report Lost Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Found Item Modal -->
+    <div class="modal" id="reportFoundModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Report Found Item</h3>
+                <button class="close-btn" onclick="closeModal('reportFoundModal')">&times;</button>
+            </div>
+            <form id="reportFoundForm" class="modal-form">
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" name="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="books">Books</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Found Location</label>
+                    <input type="text" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Information</label>
+                    <input type="text" name="contact" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Report Found Item</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Load lost and found items
+        async function loadItems() {
+            try {
+                const response = await CampusLink.apiCall('/api/lostfound');
+                if (response.success) {
+                    displayItems(response.data);
+                }
+            } catch (error) {
+                console.error('Error loading items:', error);
+            }
+        }
+
+        // Display items
+        function displayItems(items) {
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = items.map(item => `
+                <div class="item-card ${item.type}" data-category="${item.category}">
+                    <div class="item-header">
+                        <span class="item-type ${item.type}">${item.type.toUpperCase()}</span>
+                        <span class="item-date">${CampusLink.formatDate(item.createdAt)}</span>
+                    </div>
+                    <h3 class="item-title">${item.itemName}</h3>
+                    <p class="item-description">${item.description}</p>
+                    <div class="item-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        ${item.location}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-sm btn-primary" onclick="contactOwner('${item._id}')">
+                            Contact
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const items = document.querySelectorAll('.item-card');
+                
+                items.forEach(item => {
+                    if (filter === 'all' || item.classList.contains(filter)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            CampusLink.checkAuthStatus();
+            loadItems();
+        });
+    </script>
+</body>
+</html>

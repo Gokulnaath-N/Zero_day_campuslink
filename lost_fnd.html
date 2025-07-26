@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusLink - Lost & Found</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .filters h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: #34495e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: #667eea;
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 10px;
+        }
+
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            color: #34495e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px;
+            border: 2px dashed #e0e6ed;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 150px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #dee2e6;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .item-details {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .item-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .item-date {
+            color: #95a5a6;
+            font-size: 0.8rem;
+            float: right;
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Lost & Found</h1>
+            <p>Track What's Missing - Report, Search, and Reconnect with Your Belongings</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="filters">
+                    <h3>Smart Filters</h3>
+                    
+                    <div class="filter-group">
+                        <label for="categoryFilter">Category</label>
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="stationery">Stationery</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="books">Books</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="typeFilter">Type</label>
+                        <select id="typeFilter">
+                            <option value="all">All Items</option>
+                            <option value="lost">Lost Items</option>
+                            <option value="found">Found Items</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="locationFilter">Location</label>
+                        <select id="locationFilter">
+                            <option value="all">All Locations</option>
+                            <option value="library">Library</option>
+                            <option value="cafeteria">Cafeteria</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="classroom">Classroom</option>
+                            <option value="sports-complex">Sports Complex</option>
+                            <option value="parking">Parking Area</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="dateFilter">Date Range</label>
+                        <input type="date" id="dateFromFilter">
+                        <input type="date" id="dateToFilter" style="margin-top: 10px;">
+                    </div>
+
+                    <button class="btn" onclick="applyFilters()">Apply Filters</button>
+                    <button class="btn btn-secondary" onclick="clearFilters()">Clear All</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('browse')">Browse Items</div>
+                    <div class="tab" onclick="switchTab('report')">Report Item</div>
+                </div>
+
+                <div id="browse-tab" class="tab-content active">
+                    <div id="items-container" class="items-grid">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div id="report-tab" class="tab-content">
+                    <form id="reportForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="itemName">Item Name *</label>
+                                <input type="text" id="itemName" required placeholder="e.g., iPhone 13, Blue Notebook">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="itemType">Type *</label>
+                                <select id="itemType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="lost">Lost Item</option>
+                                    <option value="found">Found Item</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="itemCategory">Category *</label>
+                                <select id="itemCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="stationery">Stationery</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="books">Books</option>
+                                    <option value="accessories">Accessories</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="itemLocation">Location *</label>
+                                <select id="itemLocation" required>
+                                    <option value="">Select Location</option>
+                                    <option value="library">Library</option>
+                                    <option value="cafeteria">Cafeteria</option>
+                                    <option value="hostel">Hostel</option>
+                                    <option value="classroom">Classroom</option>
+                                    <option value="sports-complex">Sports Complex</option>
+                                    <option value="parking">Parking Area</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="itemDate">Date *</label>
+                                <input type="date" id="itemDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactInfo">Contact Info *</label>
+                                <input type="text" id="contactInfo" required placeholder="Email or Phone Number">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="itemDescription">Description *</label>
+                                <textarea id="itemDescription" required placeholder="Provide detailed description including color, brand, distinguishing features..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="itemImage">Upload Image (Optional)</label>
+                                <div class="file-upload">
+                                    <input type="file" id="itemImage" accept="image/*">
+                                    <label for="itemImage" class="file-upload-label">
+                                        📷 Click to upload image or drag and drop
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">Submit Report</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Contact Information</h2>
+            <div id="contactDetails"></div>
+            <p style="margin-top: 20px; color: #6c757d; font-size: 0.9rem;">
+                Please be respectful when contacting. Verify item details before meeting.
+            </p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Sample data for demonstration
+        let items = [
+            {
+                id: 1,
+                name: "iPhone 13 Pro",
+                type: "lost",
+                category: "electronics",
+                location: "library",
+                date: "2024-07-20",
+                description: "Space Gray iPhone 13 Pro with black case. Has a small scratch on the back.",
+                contact: "john.doe@student.edu",
+                image: "📱"
+            },
+            {
+                id: 2,
+                name: "Red Backpack",
+                type: "found",
+                category: "accessories",
+                location: "cafeteria",
+                date: "2024-07-22",
+                description: "Nike red backpack found under table 15. Contains notebooks and a water bottle.",
+                contact: "jane.smith@student.edu",
+                image: "🎒"
+            },
+            {
+                id: 3,
+                name: "Calculus Textbook",
+                type: "lost",
+                category: "books",
+                location: "classroom",
+                date: "2024-07-21",
+                description: "Stewart's Calculus 7th Edition. Name 'Alex' written on first page.",
+                contact: "alex.wilson@student.edu",
+                image: "📚"
+            },
+            {
+                id: 4,
+                name: "Black Watch",
+                type: "found",
+                category: "accessories",
+                location: "sports-complex",
+                date: "2024-07-24",
+                description: "Digital sports watch with rubber strap. Found near basketball court.",
+                contact: "mike.brown@student.edu",
+                image: "⌚"
+            },
+            {
+                id: 5,
+                name: "Blue Pen Set",
+                type: "lost",
+                category: "stationery",
+                location: "library",
+                date: "2024-07-23",
+                description: "Set of 3 blue gel pens in a transparent case. Brand: Pilot G2.",
+                contact: "sara.johnson@student.edu",
+                image: "🖊️"
+            }
+        ];
+
+        let filteredItems = [...items];
+
+        function renderItems(itemsToRender = filteredItems) {
+            const container = document.getElementById('items-container');
+            
+            if (itemsToRender.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #6c757d;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🔍</div>
+                        <h3>No items found</h3>
+                        <p>Try adjusting your filters or be the first to report an item!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = itemsToRender.map(item => `
+                <div class="item-card">
+                    <div class="item-image">${item.image}</div>
+                    <div class="item-category">${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</div>
+                    <div class="item-date">${formatDate(item.date)}</div>
+                    <div class="item-title">${item.name}</div>
+                    <div class="item-details">
+                        <strong>${item.type === 'lost' ? '🔍 Lost' : '🎯 Found'}</strong> at ${item.location.replace('-', ' ')}<br>
+                        ${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}
+                    </div>
+                    <button class="contact-btn" onclick="showContact('${item.contact}', '${item.name}')">
+                        Contact Owner
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const diffTime = Math.abs(today - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Today';
+            if (diffDays === 2) return 'Yesterday';
+            if (diffDays <= 7) return `${diffDays - 1} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const location = document.getElementById('locationFilter').value;
+            const dateFrom = document.getElementById('dateFromFilter').value;
+            const dateTo = document.getElementById('dateToFilter').value;
+
+            filteredItems = items.filter(item => {
+                if (category !== 'all' && item.category !== category) return false;
+                if (type !== 'all' && item.type !== type) return false;
+                if (location !== 'all' && item.location !== location) return false;
+                if (dateFrom && item.date < dateFrom) return false;
+                if (dateTo && item.date > dateTo) return false;
+                return true;
+            });
+
+            renderItems();
+            showNotification(`Found ${filteredItems.length} matching items`);
+        }
+
+        function clearFilters() {
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('locationFilter').value = 'all';
+            document.getElementById('dateFromFilter').value = '';
+            document.getElementById('dateToFilter').value = '';
+            
+            filteredItems = [...items];
+            renderItems();
+            showNotification('Filters cleared');
+        }
+
+        function showContact(contact, itemName) {
+            document.getElementById('contactDetails').innerHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">For: ${itemName}</h3>
+                <p style="background: #f8f9fa; padding: 15px; border-radius: 10px; font-family: monospace;">
+                    📧 ${contact}
+                </p>
+            `;
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Form submission
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newItem = {
+                id: items.length + 1,
+                name: document.getElementById('itemName').value,
+                type: document.getElementById('itemType').value,
+                category: document.getElementById('itemCategory').value,
+                location: document.getElementById('itemLocation').value,
+                date: document.getElementById('itemDate').value,
+                description: document.getElementById('itemDescription').value,
+                contact: document.getElementById('contactInfo').value,
+                image: getCategoryEmoji(document.getElementById('itemCategory').value)
+            };
+
+            items.unshift(newItem);
+            filteredItems = [...items];
+            
+            // Reset form
+            this.reset();
+            document.querySelector('.file-upload-label').textContent = '📷 Click to upload image or drag and drop';
+            
+            // Switch to browse tab
+            switchTab('browse');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector('.tab').classList.add('active');
+            
+            renderItems();
+            showNotification(`${newItem.type === 'lost' ? 'Lost' : 'Found'} item reported successfully!`);
+            
+            // Simulate match notification after 2 seconds
+            setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    showNotification('🎉 Potential match found! Check your email.');
+                }
+            }, 2000);
+        });
+
+        function getCategoryEmoji(category) {
+            const emojis = {
+                electronics: '📱',
+                stationery: '🖊️',
+                clothing: '👕',
+                books: '📚',
+                accessories: '🎒',
+                other: '📦'
+            };
+            return emojis[category] || '📦';
+        }
+
+        // File upload preview
+        document.getElementById('itemImage').addEventListener('change', function(e) {
+            const label = document.querySelector('.file-upload-label');
+            if (e.target.files.length > 0) {
+                label.textContent = `📷 ${e.target.files[0].name} selected`;
+                label.style.color = '#667eea';
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('contactModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Set today's date as max date for date inputs
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('itemDate').max = today;
+        document.getElementById('dateFromFilter').max = today;
+        document.getElementById('dateToFilter').max = today;
+
+        // Initialize page
+        renderItems();
+    </script>
+</body>
+</html>
